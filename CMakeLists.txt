@@ -1,5 +1,12 @@
 cmake_minimum_required(VERSION 3.0)
 
+option(HUNTER_ENABLED "whether or not to build with hunter packages" OFF)
+include("cmake/HunterGate.cmake")
+HunterGate(
+    URL "https://github.com/cpp-pm/hunter/archive/v0.23.241.tar.gz"
+    SHA1 "0897935585580d4eece64804f4f48fe9199a7a2c"
+)
+
 set(TINYREFL_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}" CACHE PATH "")
 set(TINYREFL_BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}" CACHE PATH "")
 set(TINYREFL_INCLUDE_DIR "${TINYREFL_SOURCE_DIR}/include" CACHE PATH "")
@@ -12,10 +19,14 @@ project(tinyrefl VERSION "${TINYREFL_VERSION}")
 
 include (CheckCXXCompilerFlag)
 
-if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
-    set(TINYREFL_IS_ROOT_PROJECT TRUE)
-else()
+if(HUNTER_ENABLED)
     set(TINYREFL_IS_ROOT_PROJECT FALSE)
+else()
+    if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
+        set(TINYREFL_IS_ROOT_PROJECT TRUE)
+    else()
+        set(TINYREFL_IS_ROOT_PROJECT FALSE)
+    endif()
 endif()
 
 option(TINYREFL_USE_LOCAL_LLVM "Use local LLVM install instead of downloading LLVM" OFF)
@@ -38,10 +49,10 @@ if(NOT MSVC)
         set(no_noexcept_abi_warning "-Wno-noexcept-type")
     endif()
 
-    set(CMAKE_CXX_FLAGS "-Wall -Werror -Wno-attributes ${no_noexcept_abi_warning}")
+    string(APPEND CMAKE_CXX_FLAGS "-Wall -Werror -Wno-attributes ${no_noexcept_abi_warning}")
 endif()
 
-if(CMAKE_TOOLCHAIN_FILE OR TINYREFL_CROSS_BUILDING)
+if(NOT HUNTER_ENABLED AND CMAKE_TOOLCHAIN_FILE OR TINYREFL_CROSS_BUILDING)
     message(STATUS "Tinyrefl cross building")
     set(TINYREFL_CROSS_BUILDING ON CACHE BOOL "")
 else()
