@@ -1025,20 +1025,20 @@ bool reflect_file(
     {
         auto warning_flag = "-W" + warning;
         std::cout << warning_flag << " ";
-        config.add_flag(warning_flag);
+        // FIXME(BJo) config.add_flag(warning_flag);
     }
 
     for(const auto& flag : custom_flags)
     {
         std::cout << flag << " ";
-        config.add_flag(flag);
+        // FIXME(BJo) config.add_flag(flag);
     }
 
 
     // Tell libclang to ignore unknown arguments
     std::cout << " -Qunused-arguments -Wno-unknown-warning-option";
-    config.add_flag("-Qunused-arguments");
-    config.add_flag("-Wno-unknown-warning-option");
+    // FIXME(BJo) config.add_flag("-Qunused-arguments");
+    // FIXME(BJo) config.add_flag("-Wno-unknown-warning-option");
     std::cout << " ...\n";
 
     try
