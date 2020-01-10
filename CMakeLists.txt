@@ -13,6 +13,8 @@ set(TINYREFL_INCLUDE_DIR "${TINYREFL_SOURCE_DIR}/include" CACHE PATH "")
 
 list(APPEND CMAKE_PREFIX_PATH "${TINYREFL_BINARY_DIR}")
 
+message(STATUS "------------------->>>>>>>>>>>>>>>>>>>>>>>>> ${TINYREFL_SOURCE_DIR}"")
+
 include(cmake/git.cmake)
 include(cmake/utils.cmake)
 project(tinyrefl VERSION "${TINYREFL_VERSION}")
