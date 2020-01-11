@@ -78,8 +78,58 @@ else()
     set(TINYREFL_TOOL_TARGET tinyrefl-tool CACHE STRING "")
 endif()
 
+# Introduce variables:
+# * CMAKE_INSTALL_LIBDIR
+# * CMAKE_INSTALL_BINDIR
+# * CMAKE_INSTALL_INCLUDEDIR
+include(GNUInstallDirs)
+
+set(config_install_dir "${CMAKE_INSTALL_LIBDIR}/cmake/tinyrefl_tool")
+set(generated_dir "${CMAKE_CURRENT_BINARY_DIR}/generated")
+set(version_config "${generated_dir}/tinyrefl_toolConfigVersion.cmake")
+set(project_config "${generated_dir}/tinyrefl_toolConfig.cmake")
+set(TARGETS_EXPORT_NAME "tinyrefl_toolTargets")
+set(namespace "tinyrefl::")
+
+install(TARGETS tinyrefl-tool
+  EXPORT "${TARGETS_EXPORT_NAME}"
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
+
+#install(FILES ........some.headerfiles......... DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+#install(DIRECTORY ${CMAKE_SOURCE_DIR}/........header.dir........./ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+
 include(CMakePackageConfigHelpers)
 
-# Generate version file for tinyrefl_tool consumers (Config module is in cmake/tinyrefl_tool-config.cmake)
-write_basic_package_version_file("${TINYREFL_BINARY_DIR}/tinyrefl_tool-version.cmake"
-    COMPATIBILITY ExactVersion)
+# Use:
+# * PROJECT_VERSION
+write_basic_package_version_file(
+    "${version_config}" COMPATIBILITY ExactVersion
+)
+
+# Use:
+# * TARGETS_EXPORT_NAME
+# * PROJECT_NAME
+configure_package_config_file(
+    "${CMAKE_SOURCE_DIR}/cmake/tinyrefl_toolConfig.cmake.in"
+    "${project_config}"
+    INSTALL_DESTINATION "${config_install_dir}"
+)
+
+install(
+    FILES "${project_config}" "${version_config}"
+    "${CMAKE_SOURCE_DIR}/tool/driver.cmake"
+    DESTINATION "${config_install_dir}"
+)
+
+install(
+    FILES "${CMAKE_SOURCE_DIR}/cmake/utils.cmake"
+    DESTINATION "${config_install_dir}/cmake"
+)
+
+install(
+    EXPORT "${TARGETS_EXPORT_NAME}"
+    NAMESPACE "${namespace}"
+    DESTINATION "${config_install_dir}"
+)
+

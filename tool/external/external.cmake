@@ -14,7 +14,6 @@ if(HUNTER_ENABLED)
     include_directories(${LLVM_INCLUDE_DIRS})
     add_definitions(${LLVM_DEFINITIONS})
     llvm_map_components_to_libnames(llvm_libs support core) # How we can compile only libclang?
-    find_package(LLVM CONFIG REQUIRED)
 
     add_library(tinyrefl_externals_fmt          INTERFACE)
     add_library(tinyrefl_externals_cppfs        INTERFACE)

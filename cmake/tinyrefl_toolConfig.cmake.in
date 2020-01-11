@@ -1,0 +1,19 @@
+@PACKAGE_INIT@
+
+include(CMakeFindDependencyMacro)
+find_dependency(Clang CONFIG REQUIRED)
+
+include("${CMAKE_CURRENT_LIST_DIR}/@TARGETS_EXPORT_NAME@.cmake")
+check_required_components("@PROJECT_NAME@")
+
+get_target_property(__CLANG_EXECUTABLE clang IMPORTED_LOCATION_RELEASE)
+get_filname_component(__CLANG_PATH "${__CLANG_EXECUTABLE}" DIRECTORY)
+find_program(clangpp_executable clang++ PATHS "${__CLANG_PATH}")
+if(clangpp_executable)
+    set(TINYREFL_TOOL_CLANGPP_EXECUTABLE "${clangpp_executable}")
+    message(STATUS "tinyrefl_tool config found clang++: ${TINYREFL_TOOL_CLANGPP_EXECUTABLE}")
+endif()
+${TINYREFL_TOOL_EXECUTABLE}
+set(TINYREFL_TOOL_TARGET tinyrefl::tinyrefl-tool)
+set(TINYREFL_SOURCE_DIR "${CMAKE_CURRENT_LIST_DIR}")
+include("${CMAKE_CURRENT_LIST_DIR}/driver.cmake")
