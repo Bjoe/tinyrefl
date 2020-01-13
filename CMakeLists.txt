@@ -17,6 +17,13 @@ include(cmake/git.cmake)
 include(cmake/utils.cmake)
 project(tinyrefl VERSION "${TINYREFL_VERSION}")
 
+# To prevent following error: error while loading shared libraries: libclang.so.6: cannot open shared object file: No such file or directory
+# set RPATH on tinyrefl-tool
+SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+# add the automatically determined parts of the RPATH
+# which point to directories outside the build tree to the install RPATH
+SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+
 include (CheckCXXCompilerFlag)
 
 if(HUNTER_ENABLED)
