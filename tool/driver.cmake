@@ -80,7 +80,7 @@ function(tinyrefl_tool)
     string(REGEX REPLACE ";" " " includes_list "${includes}")
     string(REGEX REPLACE ";" " " options_list "${compile_options}")
     string(REGEX REPLACE ";" " " definitions_list "${definitions}")
-    message(STATUS ">> Tinyrefl driver on ${ARGS_TARGET}: tinyrefl ${header_list} -std=c++${CMAKE_CXX_STANDARD} ${definitions_list} ${includes_list} ${options_list}")
+    message(STATUS ">> Tinyrefl driver on ${ARGS_TARGET}: tinyrefl ${header_list} ${definitions_list} ${includes_list} ${options_list}")
 
     if(NOT TARGET clean-tinyrefl)
         add_custom_target(clean-tinyrefl)
@@ -100,7 +100,7 @@ function(tinyrefl_tool)
 
         add_prebuild_command(TARGET ${ARGS_TARGET}
             NAME "${command_target_name}"
-            COMMAND ${TINYREFL_TOOL_EXECUTABLE} ${header} ${clang_executable_option} -std=c++${CMAKE_CXX_STANDARD} ${definitions} ${includes} ${compile_options}
+            COMMAND ${TINYREFL_TOOL_EXECUTABLE} ${header} ${clang_executable_option} ${definitions} ${includes} ${compile_options}
             WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
             COMMENT "Generating tinyrefl metadata for ${ARGS_TARGET}/${header}"
             DEPENDS ${TINYREFL_TOOL_TARGET}
